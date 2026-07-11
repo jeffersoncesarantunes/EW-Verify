@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include "ewverify.h"
 
 int run_aireplay_attack(report_t *r)

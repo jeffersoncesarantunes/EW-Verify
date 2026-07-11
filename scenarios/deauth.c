@@ -1,7 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include "ewverify.h"
 
 int run_deauth_attack(report_t *r)

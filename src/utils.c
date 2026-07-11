@@ -223,5 +223,7 @@ int run_cmd(const char *cmd, char *out, size_t outsz)
         }
     }
 
-    return pclose(f);
+    int status = pclose(f);
+    if (status == -1 || !WIFEXITED(status)) return -1;
+    return WEXITSTATUS(status);
 }
