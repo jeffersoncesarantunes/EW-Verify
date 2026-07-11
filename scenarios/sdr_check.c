@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "ewverify.h"
 
 int run_sdr_readiness(report_t *r)
@@ -9,8 +10,13 @@ int run_sdr_readiness(report_t *r)
 
     printf("  [    ] SDR_READINESS .... ");
 
-    int ret = system("lsusb 2>/dev/null | grep -qiE 'rtl2832|hackrf|bladerf|plutosdr|airspy'");
-    if (ret == 0) {
+    char buf[256];
+    int ret = run_cmd("lsusb 2>/dev/null", buf, sizeof(buf));
+
+    if (ret == 0 &&
+        (strstr(buf, "rtl2832") || strstr(buf, "hackrf") ||
+         strstr(buf, "bladerf") || strstr(buf, "plutosdr") ||
+         strstr(buf, "airspy"))) {
         result = SCENARIO_PASS;
         detected_ew = 1;
         detected_kernel = 1;
@@ -18,8 +24,11 @@ int run_sdr_readiness(report_t *r)
                detected_ew ? "✔" : "✘",
                detected_kernel ? "✔" : "✘");
     } else {
-        ret = system("which rtl_test hackrf_info 2>/dev/null | grep -q .");
-        if (ret == 0) {
+        int tools = 0;
+        if (tool_exists("rtl_test")) tools = 1;
+        if (tool_exists("hackrf_info")) tools = 1;
+
+        if (tools) {
             result = SCENARIO_PASS;
             detected_ew = 1;
             printf("PASS  (SDR tools found, no device)  [EW:%s  KS:%s]  EW-ES-002\n",

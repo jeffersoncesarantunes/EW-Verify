@@ -3,6 +3,8 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <errno.h>
+#include <limits.h>
 #include <sys/wait.h>
 #include "ewverify.h"
 #include "colors.h"
@@ -28,8 +30,11 @@ int report_add_scenario(report_t *r, const char *name,
 
     scenario_t *s = &r->scenarios[r->count];
     strncpy(s->name, name, MAX_NAME_LEN - 1);
+    s->name[MAX_NAME_LEN - 1] = '\0';
     strncpy(s->technique_id, tech_id, MAX_NAME_LEN - 1);
+    s->technique_id[MAX_NAME_LEN - 1] = '\0';
     strncpy(s->description, desc, MAX_DESC_LEN - 1);
+    s->description[MAX_DESC_LEN - 1] = '\0';
     s->result = result;
     s->detected_by_ew = detected_ew;
     s->detected_by_kernel = detected_kernel;
@@ -176,4 +181,47 @@ int report_save_csv(const report_t *r, const char *path)
 
     fclose(f);
     return 0;
+}
+
+int tool_exists(const char *name)
+{
+    if (!name) return 0;
+
+    char *path_env = getenv("PATH");
+    if (!path_env) return 0;
+
+    char *dup = strdup(path_env);
+    if (!dup) return 0;
+
+    char *dir = strtok(dup, ":");
+    int found = 0;
+    while (dir) {
+        char full[PATH_MAX];
+        int n = snprintf(full, sizeof(full), "%s/%s", dir, name);
+        if (n > 0 && (size_t)n < sizeof(full)) {
+            if (access(full, X_OK) == 0) {
+                found = 1;
+                break;
+            }
+        }
+        dir = strtok(NULL, ":");
+    }
+    free(dup);
+    return found;
+}
+
+int run_cmd(const char *cmd, char *out, size_t outsz)
+{
+    if (!cmd) return -1;
+
+    FILE *f = popen(cmd, "r");
+    if (!f) return -1;
+
+    if (out && outsz > 0) {
+        if (!fgets(out, (int)outsz, f)) {
+            out[0] = '\0';
+        }
+    }
+
+    return pclose(f);
 }

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "ewverify.h"
 
 int run_channel_hop(report_t *r)
@@ -9,8 +10,7 @@ int run_channel_hop(report_t *r)
 
     printf("  [    ] CHANNEL_HOP ...... ");
 
-    int ret = system("which iw > /dev/null 2>&1");
-    if (ret != 0) {
+    if (!tool_exists("iw")) {
         printf("SKIP  (iw not found)\n");
         report_add_scenario(r, "CHANNEL_HOP", "EW-EA-001",
                             "Electronic Attack — rapid channel hopping analysis",
@@ -18,8 +18,9 @@ int run_channel_hop(report_t *r)
         return 0;
     }
 
-    ret = system("iw dev 2>/dev/null | grep -q Interface");
-    if (ret == 0) {
+    char buf[128];
+    int ret = run_cmd("iw dev 2>/dev/null", buf, sizeof(buf));
+    if (ret == 0 && strstr(buf, "Interface")) {
         result = SCENARIO_PASS;
         detected_kernel = 1;
         detected_ew = 1;

@@ -9,8 +9,7 @@ int run_aireplay_attack(report_t *r)
 
     printf("  [    ] AIREPLAY_ATTACK .. ");
 
-    int ret = system("which aireplay-ng > /dev/null 2>&1");
-    if (ret != 0) {
+    if (!tool_exists("aireplay-ng")) {
         printf("SKIP  (aireplay-ng not found)\n");
         report_add_scenario(r, "AIREPLAY_ATTACK", "T1562.001",
                             "Aireplay-ng deauthentication and packet injection",

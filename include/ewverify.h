@@ -54,4 +54,7 @@ void report_print(const report_t *r);
 int report_save_json(const report_t *r, const char *path);
 int report_save_csv(const report_t *r, const char *path);
 
+int tool_exists(const char *name);
+int run_cmd(const char *cmd, char *out, size_t outsz);
+
 #endif

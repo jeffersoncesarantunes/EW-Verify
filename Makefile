@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Iinclude -O2 -std=c99 -D_DEFAULT_SOURCE -D_GNU_SOURCE -D_FORTIFY_SOURCE=2 -fstack-protector-strong -fPIE
+CFLAGS = -Wall -Wextra -Wformat=2 -Wformat-security -Iinclude -O2 -std=c99 -D_DEFAULT_SOURCE -D_GNU_SOURCE -D_FORTIFY_SOURCE=2 -fstack-protector-strong -fPIE
 LDFLAGS = -Wl,-z,relro,-z,now -Wl,-z,noexecstack -pie
 TARGET = ewverify
 TEST_TARGET = test_ewverify

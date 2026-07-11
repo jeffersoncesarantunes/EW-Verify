@@ -1,0 +1,11 @@
+.git/
+.gitignore
+.github/
+.sisyphus/
+build/
+reports/
+*.o
+ewverify
+test_ewverify
+Images/
+*.md

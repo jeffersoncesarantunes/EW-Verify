@@ -46,6 +46,7 @@ int main(int argc, char *argv[])
 {
     int opt_json = 0, opt_csv = 0, opt_live = 0;
     int opt_verify_only = 0, opt_cleanup = 0;
+    (void)opt_live;
     int run_all = 1;
     int opt_deauth = 0, opt_gps = 0, opt_bt = 0;
     int opt_spectrum = 0, opt_rfkill = 0, opt_reg = 0;
@@ -119,8 +120,6 @@ int main(int argc, char *argv[])
         printf("  Cleaning up child processes...\n");
         return 0;
     }
-
-    (void)opt_live;
 
     if (run_all || opt_deauth)    run_deauth_attack(&report);
     if (run_all || opt_gps)       run_gps_spoof(&report);

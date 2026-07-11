@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include "ewverify.h"
 
 int run_rfkill_check(report_t *r)
@@ -10,28 +11,30 @@ int run_rfkill_check(report_t *r)
 
     printf("  [    ] RFKILL_STATE ..... ");
 
-    FILE *f = popen("rfkill list 2>/dev/null | grep -c 'Hard blocked: yes'", "r");
-    if (f) {
-        char buf[16];
-        if (fgets(buf, sizeof(buf), f)) {
-            int blocked = atoi(buf);
-            if (blocked > 0) {
-                result = SCENARIO_PASS;
-                detected_kernel = 1;
+    char buf[64];
+    int ret = run_cmd("rfkill list 2>/dev/null | grep -c 'Hard blocked: yes'",
+                      buf, sizeof(buf));
+
+    if (ret == 0 && buf[0] != '\0') {
+        char *end = NULL;
+        errno = 0;
+        long val = strtol(buf, &end, 10);
+        if (errno == 0 && end != buf && val >= 0) {
+            result = SCENARIO_PASS;
+            detected_kernel = 1;
+            if (val > 0) {
                 printf("PASS  [EW:%s  KS:%s]  EW-EP-001\n",
                        detected_ew ? "✔" : "✘",
                        detected_kernel ? "✔" : "✘");
             } else {
-                result = SCENARIO_PASS;
-                detected_kernel = 1;
                 printf("PASS  (all RF unlocked)  [EW:%s  KS:%s]  EW-EP-001\n",
                        detected_ew ? "✔" : "✘",
                        detected_kernel ? "✔" : "✘");
             }
+        } else {
+            printf("WARN  (invalid rfkill output)\n");
         }
-        pclose(f);
     } else {
-        result = SCENARIO_SKIP;
         printf("SKIP  (rfkill not available)\n");
     }
 

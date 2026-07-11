@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/wait.h>
 #include "ewverify.h"
 
 int run_deauth_attack(report_t *r)
@@ -12,8 +11,7 @@ int run_deauth_attack(report_t *r)
 
     printf("  [    ] DEAUTH_ATTACK ... ");
 
-    int ret = system("which iw > /dev/null 2>&1");
-    if (ret != 0) {
+    if (!tool_exists("iw")) {
         printf("SKIP  (iw not found)\n");
         report_add_scenario(r, "DEAUTH_ATTACK", "T1562.001",
                             "802.11 deauthentication frame attack",
@@ -23,8 +21,9 @@ int run_deauth_attack(report_t *r)
 
     result = SCENARIO_PASS;
 
-    ret = system("iw dev 2>/dev/null | grep -q Interface");
-    if (ret == 0) {
+    char buf[128];
+    if (run_cmd("iw dev 2>/dev/null", buf, sizeof(buf)) == 0 &&
+        buf[0] != '\0' && strstr(buf, "Interface")) {
         detected_kernel = 1;
     }
 

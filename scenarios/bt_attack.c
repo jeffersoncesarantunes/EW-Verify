@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "ewverify.h"
 
 int run_bt_attack(report_t *r)
@@ -9,8 +10,7 @@ int run_bt_attack(report_t *r)
 
     printf("  [    ] BT_FLOOD ........ ");
 
-    int ret = system("which bluetoothctl > /dev/null 2>&1");
-    if (ret != 0) {
+    if (!tool_exists("bluetoothctl")) {
         printf("SKIP  (bluetoothctl not found)\n");
         report_add_scenario(r, "BT_FLOOD", "T1498",
                             "Bluetooth L2CAP flood denial of service",
@@ -18,8 +18,10 @@ int run_bt_attack(report_t *r)
         return 0;
     }
 
-    ret = system("bluetoothctl show 2>/dev/null | grep -q 'Powered: yes'");
-    if (ret == 0) {
+    char buf[256];
+    int ret = run_cmd("bluetoothctl show 2>/dev/null", buf, sizeof(buf));
+
+    if (ret == 0 && strstr(buf, "Powered: yes")) {
         result = SCENARIO_PASS;
         detected_kernel = 1;
         detected_ew = 1;

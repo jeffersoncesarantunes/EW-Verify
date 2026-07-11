@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 #include "ewverify.h"
 
 int run_gps_spoof(report_t *r)
@@ -10,18 +12,19 @@ int run_gps_spoof(report_t *r)
     printf("  [    ] GPS_SPOOF ....... ");
 
     int has_gps = 0;
-    int ret = system("ls /dev/ttyGPS* /dev/ttyACM* /dev/ttyUSB* 2>/dev/null | grep -q .");
-    if (ret == 0) has_gps = 1;
 
-    if (!has_gps) {
-        ret = system("which gpsd > /dev/null 2>&1");
-        if (ret == 0) has_gps = 1;
+    if (access("/dev/ttyGPS0", F_OK) == 0 ||
+        access("/dev/ttyACM0", F_OK) == 0 ||
+        access("/dev/ttyUSB0", F_OK) == 0) {
+        has_gps = 1;
+    }
+
+    if (!has_gps && tool_exists("gpsd")) {
+        has_gps = 1;
     }
 
     if (has_gps) {
         result = SCENARIO_WARN;
-        detected_ew = 0;
-        detected_kernel = 0;
         printf("WARN  [EW:%s  KS:%s]  T1557\n",
                detected_ew ? "✔" : "✘",
                detected_kernel ? "✔" : "✘");

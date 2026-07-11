@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "ewverify.h"
 
 int run_wifi_jam(report_t *r)
@@ -9,8 +10,8 @@ int run_wifi_jam(report_t *r)
 
     printf("  [    ] WIFI_JAM ......... ");
 
-    int ret = system("which mdk4 mdk3 aireplay-ng 2>/dev/null | grep -q .");
-    if (ret != 0) {
+    if (!tool_exists("mdk4") && !tool_exists("mdk3") &&
+        !tool_exists("aireplay-ng")) {
         printf("SKIP  (no jamming tools found)\n");
         report_add_scenario(r, "WIFI_JAM", "T1498",
                             "Wi-Fi channel jamming via noise frame injection",
@@ -18,8 +19,9 @@ int run_wifi_jam(report_t *r)
         return 0;
     }
 
-    ret = system("iw dev 2>/dev/null | grep -q Interface");
-    if (ret == 0) {
+    char buf[128];
+    int ret = run_cmd("iw dev 2>/dev/null", buf, sizeof(buf));
+    if (ret == 0 && strstr(buf, "Interface")) {
         result = SCENARIO_PASS;
         detected_kernel = 1;
         detected_ew = 1;
