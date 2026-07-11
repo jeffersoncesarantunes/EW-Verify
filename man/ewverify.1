@@ -1,0 +1,64 @@
+.TH EWVERIFY 1 "2026-07-11" "EW-Verify v0.1.0" "User Commands"
+.SH NAME
+ewverify \- Electronic Warfare Purple Team validation suite
+.SH SYNOPSIS
+.B ewverify
+[OPTIONS]
+.SH DESCRIPTION
+EW-Verify is a Purple Team adversarial validation tool for Electronic Warfare detection capabilities on Linux. It runs controlled adversarial actions in the wireless and electromagnetic spectrum, then cross-references each one against the kernel and RF interfaces that detection tools rely on.
+.SH OPTIONS
+.TP
+.B \--json
+Export JSON report (silent mode, no banner)
+.TP
+.B \--csv
+Export CSV report
+.TP
+.B \--deauth
+Run deauthentication attack scenario
+.TP
+.B \--gps-spoof
+Run GPS spoofing scenario
+.TP
+.B \--bt-attack
+Run Bluetooth attack scenario
+.TP
+.B \--spectrum
+Run spectrum congestion analysis
+.TP
+.B \--rfkill
+Check RF kill switch state
+.TP
+.B \--regulatory
+Check wireless regulatory domain
+.TP
+.B \--aireplay
+Run aireplay-ng attack scenario
+.TP
+.B \--sdr
+Check SDR device readiness
+.TP
+.B \--wifi-jam
+Run Wi-Fi jamming scenario
+.TP
+.B \--channel-hop
+Run channel hopping analysis
+.TP
+.B \--live
+Invoke live detection tools for validation
+.TP
+.B \--verify-only
+Read-only assessment (no attacks)
+.TP
+.B \--cleanup
+Clean up remaining child processes
+.TP
+.B \-h, \-\-help
+Show help
+.TP
+.B \-V, \-\-version
+Show version
+.SH AUTHOR
+Jefferson Cesar Antunes
+.SH REPORTING BUGS
+Report issues at https://github.com/jeffersoncesarantunes/EW-Verify/issues

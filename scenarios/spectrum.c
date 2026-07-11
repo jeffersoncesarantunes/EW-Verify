@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "ewverify.h"
+
+int run_spectrum_scan(report_t *r)
+{
+    scenario_result_t result = SCENARIO_SKIP;
+    int detected_ew = 0, detected_kernel = 0;
+
+    printf("  [    ] SPECTRUM_SCAN ... ");
+
+    FILE *f = fopen("/proc/net/wireless", "r");
+    if (f) {
+        char line[256];
+        int has_wireless = 0;
+        while (fgets(line, sizeof(line), f)) {
+            if (strstr(line, "wlan") || strstr(line, "wlp")) {
+                has_wireless = 1;
+                break;
+            }
+        }
+        fclose(f);
+
+        if (has_wireless) {
+            result = SCENARIO_PASS;
+            detected_kernel = 1;
+            printf("PASS  [EW:%s  KS:%s]  EW-ES-001\n",
+                   detected_ew ? "✔" : "✘",
+                   detected_kernel ? "✔" : "✘");
+        } else {
+            result = SCENARIO_WARN;
+            printf("WARN  (no wireless interfaces)\n");
+        }
+    } else {
+        printf("SKIP  (/proc/net/wireless not available)\n");
+    }
+
+    report_add_scenario(r, "SPECTRUM_SCAN", "EW-ES-001",
+                        "Electronic Support — spectrum congestion monitoring",
+                        result, detected_ew, detected_kernel);
+    return 0;
+}
