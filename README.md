@@ -75,16 +75,16 @@ Technique IDs are embedded in terminal output, JSON exports, and CSV reports.
     RUN SEQUENCE INITIATED
   ════════════════════════════════════════════════════════════════
 
-  [    ] DEAUTH_ATTACK ... PASS  [EW:✔  KS:✘]  T1562.001
-  [    ] GPS_SPOOF ....... SKIP  (no GPS device)
-  [    ] BT_FLOOD ........ WARN  (BT not powered)
-  [    ] SPECTRUM_SCAN ... WARN  (no wireless interfaces)
-  [    ] RFKILL_STATE ..... SKIP  (rfkill not available)
-  [    ] REGULATORY_CHECK . WARN  (no regulatory info)
-  [    ] AIREPLAY_ATTACK .. SKIP  (aireplay-ng not found)
-  [    ] SDR_READINESS .... PASS  (SDR tools found, no device)  [EW:✔  KS:✘]  EW-ES-002
-  [    ] WIFI_JAM ......... SKIP  (no jamming tools found)
-  [    ] CHANNEL_HOP ...... SKIP  (no wireless interface)
+  [01/10] DEAUTH_ATTACK    PASS  [EW:✔  KS:✘]  T1562.001
+  [02/10] GPS_SPOOF        SKIP  (no GPS device)
+  [03/10] BT_FLOOD         WARN  (BT not powered)
+  [04/10] SPECTRUM_SCAN    WARN  (no wireless interfaces)
+  [05/10] RFKILL_STATE     SKIP  (rfkill not available)
+  [06/10] REGULATORY_CHECK WARN  (no regulatory info)
+  [07/10] AIREPLAY_ATTACK  SKIP  (aireplay-ng not found)
+  [08/10] SDR_READINESS    PASS  (SDR tools found, no device)  [EW:✔  KS:✘]  EW-ES-002
+  [09/10] WIFI_JAM         SKIP  (no jamming tools found)
+  [10/10] CHANNEL_HOP      SKIP  (no wireless interface)
 
   ════════════════════════════════════════════════════════════════
     RESULTS
