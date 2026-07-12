@@ -67,38 +67,51 @@ Technique IDs are embedded in terminal output, JSON exports, and CSV reports.
 ## Example Output
 
 ```
-        ╔═══════════════════════════════════╗
-        ║           EW-Verify               ║
-        ║     Purple Team — Electronic      ║
-        ║         Warfare                   ║
-        ╚═══════════════════════════════════╝
+        ╔═══════════════════════════════════════════════════════╗
+        ║     EW-Verify | Purple Team - Electronic Warfare      ║
+        ╚═══════════════════════════════════════════════════════╝
 
-  ══════════════════════════════════════════════════════════════════════════
+  ════════════════════════════════════════════════════════════════
     RUN SEQUENCE INITIATED
-  ══════════════════════════════════════════════════════════════════════════
+  ════════════════════════════════════════════════════════════════
 
-  [01/10] DEAUTH_ATTACK .....  PASS  [EW:✔  KS:✘]  T1562.001
-  [02/10] GPS_SPOOF .........  WARN  [EW:✘  KS:✘]  T1557
-  [03/10] BT_FLOOD ..........  PASS  [EW:✔  KS:✘]  T1498
-  [04/10] SPECTRUM_SCAN .....  FAIL  [EW:✘  KS:✘]  EW-ES-001
-  [05/10] RFKILL_STATE ......  PASS  [EW:✔  KS:✘]  EW-EP-001
-  [06/10] REGULATORY_CHECK ..  PASS  [EW:✔  KS:✘]  EW-EP-002
-  [07/10] AIREPLAY_ATTACK ...  WARN  [EW:✘  KS:✘]  T1562.001
-  [08/10] SDR_READINESS .....  SKIP  [EW:✘  KS:✘]  EW-ES-002
-  [09/10] WIFI_JAM ..........  PASS  [EW:✔  KS:✘]  T1498
-  [10/10] CHANNEL_HOP .......  PASS  [EW:✔  KS:✘]  EW-EA-001
+  [    ] DEAUTH_ATTACK ... PASS  [EW:✔  KS:✘]  T1562.001
+  [    ] GPS_SPOOF ....... SKIP  (no GPS device)
+  [    ] BT_FLOOD ........ WARN  (BT not powered)
+  [    ] SPECTRUM_SCAN ... WARN  (no wireless interfaces)
+  [    ] RFKILL_STATE ..... SKIP  (rfkill not available)
+  [    ] REGULATORY_CHECK . WARN  (no regulatory info)
+  [    ] AIREPLAY_ATTACK .. SKIP  (aireplay-ng not found)
+  [    ] SDR_READINESS .... PASS  (SDR tools found, no device)  [EW:✔  KS:✘]  EW-ES-002
+  [    ] WIFI_JAM ......... SKIP  (no jamming tools found)
+  [    ] CHANNEL_HOP ...... SKIP  (no wireless interface)
 
-  ══════════════════════════════════════════════════════════════════════════
+  ════════════════════════════════════════════════════════════════
+    RESULTS
+  ════════════════════════════════════════════════════════════════
+
+  [01/10] DEAUTH_ATTACK      PASS  [EW:✔  KS:✘]  T1562.001
+  [02/10] GPS_SPOOF          SKIP  [EW:✘  KS:✘]  T1557
+  [03/10] BT_FLOOD           WARN  [EW:✘  KS:✘]  T1498
+  [04/10] SPECTRUM_SCAN      WARN  [EW:✘  KS:✘]  EW-ES-001
+  [05/10] RFKILL_STATE       SKIP  [EW:✘  KS:✘]  EW-EP-001
+  [06/10] REGULATORY_CHECK   WARN  [EW:✘  KS:✘]  EW-EP-002
+  [07/10] AIREPLAY_ATTACK    SKIP  [EW:✘  KS:✘]  T1562.001
+  [08/10] SDR_READINESS      PASS  [EW:✔  KS:✘]  EW-ES-002
+  [09/10] WIFI_JAM           SKIP  [EW:✘  KS:✘]  T1498
+  [10/10] CHANNEL_HOP        SKIP  [EW:✘  KS:✘]  EW-EA-001
+
+  ═════════════════════════════════════════════════════════════════
     FINAL ASSESSMENT
-  ══════════════════════════════════════════════════════════════════════════
+  ════════════════════════════════════════════════════════════════
 
-  [██████░░░░]  6/10  (60%)  adversarial actions succeeded
-  [█████░░░░░]  5/10  (50%)  detected by EW sensor
-  [░░░░░░░░░░]  0/10  (0%)   detected by K-Scanner
-  [████░░░░░░]  4/10  (40%)  unmonitored gaps (no coverage)
+   [█████░░░░░]  5/10  (50%)  adversarial actions succeeded
+   [██░░░░░░░░]  2/10  (20%)  detected by EW-Sensor
+   [░░░░░░░░░░]  0/10  (0%)  detected by Kernel
+   [████████░░]  8/10  (80%)  unmonitored gaps (no EW or KS coverage)
 
    STATUS:  Purple Team Validation Complete
-  ══════════════════════════════════════════════════════════════════════════
+  ════════════════════════════════════════════════════════════════
 ```
 
 
