@@ -194,18 +194,20 @@ sudo ./ewverify --check-req
 
 ### External Dependencies
 
-Some scenarios require optional external tools:
+Some scenarios require optional tools. The tool handles missing dependencies gracefully (SKIP), but installing them enables more scenarios:
 
-```bash
-# For wireless deauth and aireplay scenarios
-sudo pacman -S aircrack-ng
+| Tool | Required by | Install (Arch) | Install (Debian/Ubuntu) |
+|---|---|---|---|
+| `iw` | deauth, regulatory, channel-hop, wifi-jam | `sudo pacman -S iw` | `sudo apt install iw` |
+| `rfkill` | rfkill | `sudo pacman -S rfkill` | `sudo apt install rfkill` |
+| `bluetoothctl` | bt-attack | `sudo pacman -S bluez bluez-utils` | `sudo apt install bluez bluez-tools` |
+| `aireplay-ng` | aireplay, deauth | `sudo pacman -S aircrack-ng` | `sudo apt install aircrack-ng` |
+| `mdk4` / `mdk3` | wifi-jam | `yay -S mdk4` (AUR) | `sudo apt install mdk4` |
+| `gpsd` | gps-spoof | `sudo pacman -S gpsd` | `sudo apt install gpsd` |
+| `rtl_test` | sdr | `sudo pacman -S rtl-sdr` | `sudo apt install rtl-sdr` |
+| `hackrf_info` | sdr | `sudo pacman -S hackrf` | `sudo apt install hackrf` |
 
-# For Bluetooth attack scenarios
-sudo pacman -S bluez bluez-utils
-
-# For SDR readiness check
-sudo pacman -S rtl-sdr hackrf
-```
+> 💡 Run `sudo ./ewverify --check-req` before executing scenarios to see which tools and hardware are available on your system.
 
 When `--json` is used alone, the tool skips the banner and terminal output entirely and writes only the JSON report file. This is meant for automated pipelines, cron jobs, and CI/CD integration.
 
