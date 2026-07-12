@@ -61,6 +61,8 @@ Every scenario is mapped to a real MITRE ATT&CK technique or Electronic Warfare 
 
 Technique IDs are embedded in terminal output, JSON exports, and CSV reports.
 
+> **Note:** IDs prefixed with `EW-ES`, `EW-EP`, and `EW-EA` are **extended taxonomy** specific to EW-Verify — not official MITRE ATT&CK identifiers. They cover electromagnetic spectrum scenarios (Electronic Support, Electronic Protection, Electronic Attack) that MITRE does not currently address. Scenarios with standard MITRE IDs (e.g., T1562.001) map directly to ATT&CK for Enterprise or ICS.
+
 
 ---
 
@@ -331,15 +333,19 @@ The language is C99. Data sources are `/sys`, `/proc`, `iw`, `rfkill`, and USB d
 - [x] Detection Gap Analysis (unmonitored blind spots)
 - [x] Silent JSON mode for CI/CD pipelines
 - [x] `--verify-only` read-only assessment mode
-- [ ] RFkill-based detection validation (`--rfkill`)
-- [ ] Regulatory domain enforcement validation (`--regulatory`)
+- [x] RFkill-based detection validation (`--rfkill`)
+- [x] Regulatory domain enforcement validation (`--regulatory`)
+- [x] SDR device readiness check (`--sdr`)
+- [x] Wi-Fi channel hopping detection (`--channel-hop`)
+- [x] Automated test suite (`make test`)
+- [x] CI/CD pipeline (GitHub Actions)
+- [x] Hardware requirements check (`--check-req`)
+- [x] Centralized hardware detection (has_wireless, has_bt, has_gps, has_sdr)
 - [ ] Live tool integration (`--live`)
-- [ ] SDR device readiness check (`--sdr`)
-- [ ] Wi-Fi channel hopping detection (`--channel-hop`)
-- [ ] Automated test suite (`make test`)
-- [ ] CI/CD pipeline (GitHub Actions)
-- [ ] eBPF-based wireless syscall telemetry
+- [ ] Scenario-level automated tests with interface mocking (`/proc`, `/sys`, `iw`)
+- [ ] Map extended taxonomy (EW-ES/EP/EA) to real MITRE ATT&CK for ICS
 - [ ] Container-aware scenario execution
+- [ ] eBPF-based wireless syscall telemetry
 
 
 ---
