@@ -47,6 +47,7 @@ static void print_usage(void)
     printf("  --live              Invoke live detection tools for validation\n");
     printf("  --verify-only       Read-only assessment (no attacks)\n");
     printf("  --cleanup           Clean up any remaining child processes\n");
+    printf("  --check-req         Check available hardware and tools\n");
     printf("  -h, --help          Show this help\n");
     printf("  -V, --version       Show version\n");
 }
@@ -54,7 +55,7 @@ static void print_usage(void)
 int main(int argc, char *argv[])
 {
     int opt_json = 0, opt_csv = 0, opt_live = 0;
-    int opt_verify_only = 0, opt_cleanup = 0;
+    int opt_verify_only = 0, opt_cleanup = 0, opt_check_req = 0;
     (void)opt_live;
     int run_all = 1;
     int opt_deauth = 0, opt_gps = 0, opt_bt = 0;
@@ -67,6 +68,7 @@ int main(int argc, char *argv[])
         {"live",        no_argument, 0, 'l'},
         {"verify-only", no_argument, 0, 'v'},
         {"cleanup",     no_argument, 0, 'C'},
+        {"check-req",   no_argument, 0, 256},
         {"deauth",      no_argument, 0, 'd'},
         {"gps-spoof",   no_argument, 0, 'g'},
         {"bt-attack",   no_argument, 0, 'b'},
@@ -90,6 +92,7 @@ int main(int argc, char *argv[])
         case 'l': opt_live = 1; break;
         case 'v': opt_verify_only = 1; break;
         case 'C': opt_cleanup = 1; break;
+        case 256: opt_check_req = 1; break;
         case 'd': opt_deauth = 1; run_all = 0; break;
         case 'g': opt_gps = 1; run_all = 0; break;
         case 'b': opt_bt = 1; run_all = 0; break;
@@ -111,6 +114,11 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    if (opt_check_req) {
+        check_requirements();
+        return 0;
+    }
+
     report_t report;
     report_init(&report);
 
@@ -130,16 +138,17 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    if (run_all || opt_deauth)    run_deauth_attack(&report);
-    if (run_all || opt_gps)       run_gps_spoof(&report);
-    if (run_all || opt_bt)        run_bt_attack(&report);
-    if (run_all || opt_spectrum)  run_spectrum_scan(&report);
-    if (run_all || opt_rfkill)    run_rfkill_check(&report);
-    if (run_all || opt_reg)       run_regulatory_check(&report);
-    if (run_all || opt_aireplay)  run_aireplay_attack(&report);
-    if (run_all || opt_sdr)       run_sdr_readiness(&report);
-    if (run_all || opt_jam)       run_wifi_jam(&report);
-    if (run_all || opt_chop)      run_channel_hop(&report);
+    int seq = 0, total_scenarios = 10;
+    if (run_all || opt_deauth)    run_deauth_attack(&report, ++seq, total_scenarios);
+    if (run_all || opt_gps)       run_gps_spoof(&report, ++seq, total_scenarios);
+    if (run_all || opt_bt)        run_bt_attack(&report, ++seq, total_scenarios);
+    if (run_all || opt_spectrum)  run_spectrum_scan(&report, ++seq, total_scenarios);
+    if (run_all || opt_rfkill)    run_rfkill_check(&report, ++seq, total_scenarios);
+    if (run_all || opt_reg)       run_regulatory_check(&report, ++seq, total_scenarios);
+    if (run_all || opt_aireplay)  run_aireplay_attack(&report, ++seq, total_scenarios);
+    if (run_all || opt_sdr)       run_sdr_readiness(&report, ++seq, total_scenarios);
+    if (run_all || opt_jam)       run_wifi_jam(&report, ++seq, total_scenarios);
+    if (run_all || opt_chop)      run_channel_hop(&report, ++seq, total_scenarios);
 
     if (!opt_json) {
         report_print(&report);

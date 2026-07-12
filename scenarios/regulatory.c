@@ -2,12 +2,12 @@
 #include <string.h>
 #include "ewverify.h"
 
-int run_regulatory_check(report_t *r)
+int run_regulatory_check(report_t *r, int idx, int total)
 {
     scenario_result_t result = SCENARIO_SKIP;
     int detected_ew = 0, detected_kernel = 0;
 
-    printf("  [    ] REGULATORY_CHECK . ");
+    scenario_print_header(idx, total, "REGULATORY_CHECK");
 
     char buf[256];
     int ret = run_cmd("iw reg get 2>/dev/null", buf, sizeof(buf));

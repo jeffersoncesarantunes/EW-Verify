@@ -185,6 +185,9 @@ sudo ./ewverify --verify-only
 
 # Clean up any remaining child processes
 sudo ./ewverify --cleanup
+
+# Check available hardware and tools before running
+sudo ./ewverify --check-req
 ```
 
 ### External Dependencies

@@ -2,12 +2,12 @@
 #include <unistd.h>
 #include "ewverify.h"
 
-int run_gps_spoof(report_t *r)
+int run_gps_spoof(report_t *r, int idx, int total)
 {
     scenario_result_t result = SCENARIO_SKIP;
     int detected_ew = 0, detected_kernel = 0;
 
-    printf("  [    ] GPS_SPOOF ....... ");
+    scenario_print_header(idx, total, "GPS_SPOOF");
 
     int has_gps = 0;
 

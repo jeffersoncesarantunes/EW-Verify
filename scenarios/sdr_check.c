@@ -2,12 +2,12 @@
 #include <string.h>
 #include "ewverify.h"
 
-int run_sdr_readiness(report_t *r)
+int run_sdr_readiness(report_t *r, int idx, int total)
 {
     scenario_result_t result = SCENARIO_SKIP;
     int detected_ew = 0, detected_kernel = 0;
 
-    printf("  [    ] SDR_READINESS .... ");
+    scenario_print_header(idx, total, "SDR_READINESS");
 
     char buf[256];
     int ret = run_cmd("lsusb 2>/dev/null", buf, sizeof(buf));

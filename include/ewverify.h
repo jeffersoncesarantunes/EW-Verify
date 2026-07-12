@@ -56,5 +56,12 @@ int report_save_csv(const report_t *r, const char *path);
 
 int tool_exists(const char *name);
 int run_cmd(const char *cmd, char *out, size_t outsz);
+void scenario_print_header(int idx, int total, const char *name);
+void check_requirements(void);
+int has_wireless_tool(void);
+int has_bluetooth(void);
+int has_gps(void);
+int has_sdr(void);
+int has_monitor_mode(void);
 
 #endif

@@ -2,12 +2,12 @@
 #include <string.h>
 #include "ewverify.h"
 
-int run_wifi_jam(report_t *r)
+int run_wifi_jam(report_t *r, int idx, int total)
 {
     scenario_result_t result = SCENARIO_SKIP;
     int detected_ew = 0, detected_kernel = 0;
 
-    printf("  [    ] WIFI_JAM ......... ");
+    scenario_print_header(idx, total, "WIFI_JAM");
 
     if (!tool_exists("mdk4") && !tool_exists("mdk3") &&
         !tool_exists("aireplay-ng")) {

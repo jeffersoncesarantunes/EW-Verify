@@ -2,12 +2,12 @@
 #include <string.h>
 #include "ewverify.h"
 
-int run_deauth_attack(report_t *r)
+int run_deauth_attack(report_t *r, int idx, int total)
 {
     scenario_result_t result = SCENARIO_SKIP;
     int detected_ew = 0, detected_kernel = 0;
 
-    printf("  [    ] DEAUTH_ATTACK ... ");
+    scenario_print_header(idx, total, "DEAUTH_ATTACK");
 
     if (!tool_exists("iw")) {
         printf("SKIP  (iw not found)\n");

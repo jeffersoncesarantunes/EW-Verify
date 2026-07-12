@@ -240,3 +240,70 @@ int run_cmd(const char *cmd, char *out, size_t outsz)
     if (status == -1 || !WIFEXITED(status)) return -1;
     return WEXITSTATUS(status);
 }
+
+void scenario_print_header(int idx, int total, const char *name)
+{
+    printf("  [%02d/%02d] %-16s ", idx, total, name);
+}
+
+void check_requirements(void)
+{
+    printf("\n");
+    printf("  " COLOR_BOLD COLOR_YELLOW "\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90" COLOR_RESET "\n");
+    printf("   " COLOR_BOLD COLOR_YELLOW " REQUIREMENTS CHECK" COLOR_RESET "\n");
+    printf("  " COLOR_BOLD COLOR_YELLOW "\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90" COLOR_RESET "\n\n");
+
+    struct { const char *name; const char *cmd; int critical; } checks[] = {
+        {"iw (wireless tool)",    "iw",     1},
+        {"rfkill",               "rfkill",  1},
+        {"bluetoothctl",         "bluetoothctl", 0},
+        {"aireplay-ng",          "aireplay-ng", 0},
+        {"mdk4/mdk3",            "mdk4",    0},
+        {"gpsd",                 "gpsd",    0},
+        {"rtl_test (RTL-SDR)",   "rtl_test", 0},
+        {"hackrf_info (HackRF)", "hackrf_info", 0},
+        {"iw dev (wireless iface)", "", 1},
+    };
+
+    for (size_t i = 0; i < sizeof(checks)/sizeof(checks[0]); i++) {
+        const char *mark;
+        if (strcmp(checks[i].cmd, "") == 0) {
+            mark = has_wireless_tool() ? COLOR_GREEN "✔" COLOR_RESET : COLOR_RED "✘" COLOR_RESET;
+        } else {
+            mark = tool_exists(checks[i].cmd) ? COLOR_GREEN "✔" COLOR_RESET : COLOR_RED "✘" COLOR_RESET;
+        }
+        printf("   %s  %s\n", mark, checks[i].name);
+    }
+
+    printf("\n   " COLOR_BOLD "Summary:" COLOR_RESET "\n");
+    printf("   Wireless interface:  %s\n", has_wireless_tool() ? "detected" : "not found");
+    printf("   Bluetooth:           %s\n", has_bluetooth() ? "detected" : "not found");
+    printf("   GPS device:          %s\n", has_gps() ? "detected" : "not found");
+    printf("   SDR device:          %s\n", has_sdr() ? "detected" : "not found");
+    printf("   Monitor mode:        %s\n\n", has_monitor_mode() ? "available" : "not available");
+}
+
+int has_wireless_tool(void)
+{
+    return tool_exists("iw");
+}
+
+int has_bluetooth(void)
+{
+    return tool_exists("bluetoothctl");
+}
+
+int has_gps(void)
+{
+    return tool_exists("gpsd");
+}
+
+int has_sdr(void)
+{
+    return tool_exists("rtl_test") || tool_exists("hackrf_info");
+}
+
+int has_monitor_mode(void)
+{
+    return tool_exists("iw");
+}
