@@ -142,32 +142,48 @@ The final assessment includes a metric called **unmonitored gaps** — scenarios
 
 ---
 
-## Build and Run
+## Quick Start
 
 ```bash
-# Clone the repository
 git clone https://github.com/jeffersoncesarantunes/EW-Verify.git
-cd EW-Verify
+cd EW-Verify && make
+sudo ./ewverify --check-req && sudo ./ewverify
+```
 
-# Build the project
-make
+> 💡 Run `sudo ./ewverify --check-req` before executing scenarios to see which tools and hardware are available on your system.
 
-# (Optional) Clean rebuild from scratch
-make clean && make
+## Build
 
-# Run the test suite
-make test
+```bash
+make                # Build the project
+make clean && make  # Clean rebuild from scratch
+make test           # Run the test suite
+```
 
-# Run all scenarios with default terminal output
-sudo ./ewverify
+## Usage
 
-# Run all scenarios with silent JSON export (no banner, CI/CD ready)
-sudo ./ewverify --json
+### General
 
-# Export results to CSV
-sudo ./ewverify --csv
+```bash
+sudo ./ewverify               # Run all scenarios
+sudo ./ewverify --verify-only # Read-only verification (no adversarial actions)
+sudo ./ewverify --live        # Run with live detection tool integration
+sudo ./ewverify --cleanup     # Clean up any remaining child processes
+sudo ./ewverify --check-req   # Check available hardware and tools before running
+```
 
-# Run a specific module
+### Export
+
+```bash
+sudo ./ewverify --json  # Silent JSON export, no banner (CI/CD ready)
+sudo ./ewverify --csv   # Export results to CSV
+```
+
+When `--json` is used alone, the tool skips the banner and terminal output entirely and writes only the JSON report file. This is meant for automated pipelines, cron jobs, and CI/CD integration.
+
+### Modules
+
+```bash
 sudo ./ewverify --deauth
 sudo ./ewverify --gps-spoof
 sudo ./ewverify --bt-attack
@@ -178,18 +194,6 @@ sudo ./ewverify --aireplay
 sudo ./ewverify --sdr
 sudo ./ewverify --wifi-jam
 sudo ./ewverify --channel-hop
-
-# Run with live detection tool integration
-sudo ./ewverify --live
-
-# Read-only verification (no adversarial actions)
-sudo ./ewverify --verify-only
-
-# Clean up any remaining child processes
-sudo ./ewverify --cleanup
-
-# Check available hardware and tools before running
-sudo ./ewverify --check-req
 ```
 
 ### External Dependencies
@@ -206,10 +210,6 @@ Some scenarios require optional tools. The tool handles missing dependencies gra
 | `gpsd` | gps-spoof | `sudo pacman -S gpsd` | `sudo apt install gpsd` |
 | `rtl_test` | sdr | `sudo pacman -S rtl-sdr` | `sudo apt install rtl-sdr` |
 | `hackrf_info` | sdr | `sudo pacman -S hackrf` | `sudo apt install hackrf` |
-
-> 💡 Run `sudo ./ewverify --check-req` before executing scenarios to see which tools and hardware are available on your system.
-
-When `--json` is used alone, the tool skips the banner and terminal output entirely and writes only the JSON report file. This is meant for automated pipelines, cron jobs, and CI/CD integration.
 
 
 ---
