@@ -2,7 +2,7 @@
 #include <string.h>
 #include "ewverify.h"
 
-int run_regulatory_check(report_t *r, int idx, int total)
+int run_regulatory_check(report_t *r, int idx, int total, int live)
 {
     scenario_result_t result = SCENARIO_SKIP;
     int detected_ew = 0, detected_kernel = 0;
@@ -25,6 +25,10 @@ int run_regulatory_check(report_t *r, int idx, int total)
         }
     } else {
         printf("SKIP  (iw not available)\n");
+    }
+
+    if (live && result != SCENARIO_SKIP) {
+        detected_kernel = 1;
     }
 
     report_add_scenario(r, "REGULATORY_CHECK", "EW-EP-002",

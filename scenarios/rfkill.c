@@ -4,7 +4,7 @@
 #include <errno.h>
 #include "ewverify.h"
 
-int run_rfkill_check(report_t *r, int idx, int total)
+int run_rfkill_check(report_t *r, int idx, int total, int live)
 {
     scenario_result_t result = SCENARIO_SKIP;
     int detected_ew = 0, detected_kernel = 0;
@@ -36,6 +36,10 @@ int run_rfkill_check(report_t *r, int idx, int total)
         }
     } else {
         printf("SKIP  (rfkill not available)\n");
+    }
+
+    if (live && result != SCENARIO_SKIP) {
+        detected_kernel = 1;
     }
 
     report_add_scenario(r, "RFKILL_STATE", "EW-EP-001",

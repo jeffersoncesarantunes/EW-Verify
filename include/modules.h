@@ -3,16 +3,16 @@
 
 #include "ewverify.h"
 
-int run_deauth_attack(report_t *r, int idx, int total);
-int run_gps_spoof(report_t *r, int idx, int total);
-int run_bt_attack(report_t *r, int idx, int total);
-int run_spectrum_scan(report_t *r, int idx, int total);
-int run_rfkill_check(report_t *r, int idx, int total);
-int run_regulatory_check(report_t *r, int idx, int total);
-int run_aireplay_attack(report_t *r, int idx, int total);
-int run_sdr_readiness(report_t *r, int idx, int total);
-int run_wifi_jam(report_t *r, int idx, int total);
-int run_channel_hop(report_t *r, int idx, int total);
+int run_deauth_attack(report_t *r, int idx, int total, int live);
+int run_gps_spoof(report_t *r, int idx, int total, int live);
+int run_bt_attack(report_t *r, int idx, int total, int live);
+int run_spectrum_scan(report_t *r, int idx, int total, int live);
+int run_rfkill_check(report_t *r, int idx, int total, int live);
+int run_regulatory_check(report_t *r, int idx, int total, int live);
+int run_aireplay_attack(report_t *r, int idx, int total, int live);
+int run_sdr_readiness(report_t *r, int idx, int total, int live);
+int run_wifi_jam(report_t *r, int idx, int total, int live);
+int run_channel_hop(report_t *r, int idx, int total, int live);
 int run_verify_only(report_t *r);
 
 #endif

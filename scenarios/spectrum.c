@@ -2,7 +2,7 @@
 #include <string.h>
 #include "ewverify.h"
 
-int run_spectrum_scan(report_t *r, int idx, int total)
+int run_spectrum_scan(report_t *r, int idx, int total, int live)
 {
     scenario_result_t result = SCENARIO_SKIP;
     int detected_ew = 0, detected_kernel = 0;
@@ -33,6 +33,14 @@ int run_spectrum_scan(report_t *r, int idx, int total)
         }
     } else {
         printf("SKIP  (/proc/net/wireless not available)\n");
+    }
+
+    if (live && result != SCENARIO_SKIP) {
+        char lbuf[256];
+        if (run_cmd("timeout 3 iw dev wlan0 survey dump 2>/dev/null | head -20", lbuf, sizeof(lbuf)) == 0 && lbuf[0]) {
+            detected_ew = 1;
+            detected_kernel = 1;
+        }
     }
 
     report_add_scenario(r, "SPECTRUM_SCAN", "EW-ES-001",

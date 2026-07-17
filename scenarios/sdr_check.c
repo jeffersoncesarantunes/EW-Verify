@@ -2,7 +2,7 @@
 #include <string.h>
 #include "ewverify.h"
 
-int run_sdr_readiness(report_t *r, int idx, int total)
+int run_sdr_readiness(report_t *r, int idx, int total, int live)
 {
     scenario_result_t result = SCENARIO_SKIP;
     int detected_ew = 0, detected_kernel = 0;
@@ -35,6 +35,13 @@ int run_sdr_readiness(report_t *r, int idx, int total)
                    detected_kernel ? "✔" : "✘");
         } else {
             printf("SKIP  (no SDR device or tools found)\n");
+        }
+    }
+
+    if (live && result != SCENARIO_SKIP) {
+        char lbuf[256];
+        if (run_cmd("timeout 3 rtl_test -t 2>/dev/null", lbuf, sizeof(lbuf)) == 0 && lbuf[0]) {
+            detected_kernel = 1;
         }
     }
 

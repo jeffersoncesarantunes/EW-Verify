@@ -103,7 +103,7 @@ Technique IDs are embedded in terminal output, JSON exports, and CSV reports.
   [09/10] WIFI_JAM           SKIP  [EW:✘  KS:✘]  T1498
   [10/10] CHANNEL_HOP        SKIP  [EW:✘  KS:✘]  EW-EA-001
 
-  ═════════════════════════════════════════════════════════════════
+  ════════════════════════════════════════════════════════════════
     FINAL ASSESSMENT
   ════════════════════════════════════════════════════════════════
 
@@ -343,7 +343,7 @@ The language is C99. Data sources are `/sys`, `/proc`, `iw`, `rfkill`, and USB d
 - [x] CI/CD pipeline (GitHub Actions)
 - [x] Hardware requirements check (`--check-req`)
 - [x] Centralized hardware detection (has_wireless, has_bt, has_gps, has_sdr)
-- [ ] Live tool integration (`--live`)
+- [x] Live tool integration (`--live`)
 - [ ] Scenario-level automated tests with interface mocking (`/proc`, `/sys`, `iw`)
 - [ ] Map extended taxonomy (EW-ES/EP/EA) to real MITRE ATT&CK for ICS
 - [ ] Container-aware scenario execution

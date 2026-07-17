@@ -56,7 +56,6 @@ int main(int argc, char *argv[])
 {
     int opt_json = 0, opt_csv = 0, opt_live = 0;
     int opt_verify_only = 0, opt_cleanup = 0, opt_check_req = 0;
-    (void)opt_live;
     int run_all = 1;
     int opt_deauth = 0, opt_gps = 0, opt_bt = 0;
     int opt_spectrum = 0, opt_rfkill = 0, opt_reg = 0;
@@ -124,9 +123,10 @@ int main(int argc, char *argv[])
 
     if (!opt_json) {
         print_banner();
-        printf("  " COLOR_BOLD COLOR_YELLOW "\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90" COLOR_RESET "\n");
+        print_separator();
         printf("   " COLOR_BOLD COLOR_YELLOW " RUN SEQUENCE INITIATED" COLOR_RESET "\n");
-        printf("  " COLOR_BOLD COLOR_YELLOW "\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90\xe2\x95\x90" COLOR_RESET "\n\n");
+        print_separator();
+        printf("\n");
     }
 
     if (opt_verify_only) {
@@ -139,16 +139,16 @@ int main(int argc, char *argv[])
     }
 
     int seq = 0, total_scenarios = 10;
-    if (run_all || opt_deauth)    run_deauth_attack(&report, ++seq, total_scenarios);
-    if (run_all || opt_gps)       run_gps_spoof(&report, ++seq, total_scenarios);
-    if (run_all || opt_bt)        run_bt_attack(&report, ++seq, total_scenarios);
-    if (run_all || opt_spectrum)  run_spectrum_scan(&report, ++seq, total_scenarios);
-    if (run_all || opt_rfkill)    run_rfkill_check(&report, ++seq, total_scenarios);
-    if (run_all || opt_reg)       run_regulatory_check(&report, ++seq, total_scenarios);
-    if (run_all || opt_aireplay)  run_aireplay_attack(&report, ++seq, total_scenarios);
-    if (run_all || opt_sdr)       run_sdr_readiness(&report, ++seq, total_scenarios);
-    if (run_all || opt_jam)       run_wifi_jam(&report, ++seq, total_scenarios);
-    if (run_all || opt_chop)      run_channel_hop(&report, ++seq, total_scenarios);
+    if (run_all || opt_deauth)    run_deauth_attack(&report, ++seq, total_scenarios, opt_live);
+    if (run_all || opt_gps)       run_gps_spoof(&report, ++seq, total_scenarios, opt_live);
+    if (run_all || opt_bt)        run_bt_attack(&report, ++seq, total_scenarios, opt_live);
+    if (run_all || opt_spectrum)  run_spectrum_scan(&report, ++seq, total_scenarios, opt_live);
+    if (run_all || opt_rfkill)    run_rfkill_check(&report, ++seq, total_scenarios, opt_live);
+    if (run_all || opt_reg)       run_regulatory_check(&report, ++seq, total_scenarios, opt_live);
+    if (run_all || opt_aireplay)  run_aireplay_attack(&report, ++seq, total_scenarios, opt_live);
+    if (run_all || opt_sdr)       run_sdr_readiness(&report, ++seq, total_scenarios, opt_live);
+    if (run_all || opt_jam)       run_wifi_jam(&report, ++seq, total_scenarios, opt_live);
+    if (run_all || opt_chop)      run_channel_hop(&report, ++seq, total_scenarios, opt_live);
 
     if (!opt_json) {
         report_print(&report);

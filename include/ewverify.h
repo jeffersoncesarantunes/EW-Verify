@@ -63,5 +63,6 @@ int has_bluetooth(void);
 int has_gps(void);
 int has_sdr(void);
 int has_monitor_mode(void);
+void print_separator(void);
 
 #endif
