@@ -224,21 +224,101 @@ int tool_exists(const char *name)
     return found;
 }
 
+int validate_interface_name(const char *name)
+{
+    if (!name || name[0] == '\0') return 0;
+    for (const char *p = name; *p; p++) {
+        if (!((*p >= 'a' && *p <= 'z') ||
+              (*p >= 'A' && *p <= 'Z') ||
+              (*p >= '0' && *p <= '9') ||
+              *p == '_' || *p == '-'))
+            return 0;
+    }
+    return 1;
+}
+
+static int validate_shell_cmd(const char *cmd)
+{
+    if (!cmd || cmd[0] == '\0') return 0;
+    size_t len = strlen(cmd);
+    if (len > 4096) return 0;
+    for (const char *p = cmd; *p; p++) {
+        if ((unsigned char)*p < 0x20 && *p != '\t') return 0;
+    }
+    return 1;
+}
+
 int run_cmd(const char *cmd, char *out, size_t outsz)
 {
-    if (!cmd) return -1;
+    if (!cmd || !validate_shell_cmd(cmd)) return -1;
 
-    FILE *f = popen(cmd, "r");
-    if (!f) return -1;
+    int pipefd[2];
+    if (pipe(pipefd) == -1) return -1;
 
-    if (out && outsz > 0) {
-        if (!fgets(out, (int)outsz, f)) {
-            out[0] = '\0';
-        }
+    pid_t pid = fork();
+    if (pid == -1) {
+        close(pipefd[0]); close(pipefd[1]);
+        return -1;
     }
 
-    int status = pclose(f);
-    if (status == -1 || !WIFEXITED(status)) return -1;
+    if (pid == 0) {
+        close(pipefd[0]);
+        if (dup2(pipefd[1], STDOUT_FILENO) == -1) _exit(1);
+        if (dup2(pipefd[1], STDERR_FILENO) == -1) _exit(1);
+        close(pipefd[1]);
+        execl("/bin/sh", "sh", "-c", cmd, (char *)NULL);
+        _exit(127);
+    }
+
+    close(pipefd[1]);
+
+    if (out && outsz > 0) {
+        ssize_t n = read(pipefd[0], out, outsz - 1);
+        if (n > 0) out[n] = '\0';
+        else out[0] = '\0';
+    }
+    close(pipefd[0]);
+
+    int status;
+    waitpid(pid, &status, 0);
+    if (!WIFEXITED(status)) return -1;
+    return WEXITSTATUS(status);
+}
+
+int run_cmd_argv(char *const argv[], char *out, size_t outsz)
+{
+    if (!argv || !argv[0]) return -1;
+
+    int pipefd[2];
+    if (pipe(pipefd) == -1) return -1;
+
+    pid_t pid = fork();
+    if (pid == -1) {
+        close(pipefd[0]); close(pipefd[1]);
+        return -1;
+    }
+
+    if (pid == 0) {
+        close(pipefd[0]);
+        if (dup2(pipefd[1], STDOUT_FILENO) == -1) _exit(1);
+        if (dup2(pipefd[1], STDERR_FILENO) == -1) _exit(1);
+        close(pipefd[1]);
+        execvp(argv[0], argv);
+        _exit(127);
+    }
+
+    close(pipefd[1]);
+
+    if (out && outsz > 0) {
+        ssize_t n = read(pipefd[0], out, outsz - 1);
+        if (n > 0) out[n] = '\0';
+        else out[0] = '\0';
+    }
+    close(pipefd[0]);
+
+    int status;
+    waitpid(pid, &status, 0);
+    if (!WIFEXITED(status)) return -1;
     return WEXITSTATUS(status);
 }
 

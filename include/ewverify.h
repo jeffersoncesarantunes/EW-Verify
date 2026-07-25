@@ -55,7 +55,9 @@ int report_save_json(const report_t *r, const char *path);
 int report_save_csv(const report_t *r, const char *path);
 
 int tool_exists(const char *name);
+int validate_interface_name(const char *name);
 int run_cmd(const char *cmd, char *out, size_t outsz);
+int run_cmd_argv(char *const argv[], char *out, size_t outsz);
 void scenario_print_header(int idx, int total, const char *name);
 void check_requirements(void);
 int has_wireless_tool(void);
