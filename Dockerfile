@@ -1,4 +1,4 @@
-FROM alpine:latest AS build
+FROM alpine:3.24 AS build
 
 RUN apk add --no-cache \
     gcc \
@@ -10,7 +10,7 @@ WORKDIR /src
 COPY . .
 RUN make clean && make
 
-FROM alpine:latest
+FROM alpine:3.24
 
 RUN apk add --no-cache \
     iw \
