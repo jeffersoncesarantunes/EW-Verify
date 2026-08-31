@@ -229,13 +229,6 @@ cat ewverify-report.json | head -n 15
 
 ---
 
-## Project in Action
-
-Screenshots are reserved for a future visual walkthrough. The images directory contains assets that will be referenced here once the walkthrough is finalized.
-
-
----
-
 ## Operational Integrity
 
 EW-Verify is designed for controlled adversarial testing. All wireless attacks target test interfaces only — never production networks. Child processes are tracked and reaped. The `--cleanup` mode kills any remaining children. `--verify-only` does a read-only assessment. There are no persistent system modifications and no lateral movement. Every action is logged transparently. Use in isolated, authorized lab environments only.

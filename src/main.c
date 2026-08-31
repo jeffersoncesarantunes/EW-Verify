@@ -130,11 +130,19 @@ int main(int argc, char *argv[])
     }
 
     if (opt_verify_only) {
+        if (opt_json) {
+            report_save_json(&report, "ewverify-report.json");
+            return 0;
+        }
         return run_verify_only(&report);
     }
 
     if (opt_cleanup) {
         printf("  Cleaning up child processes...\n");
+        char out[256] = {0};
+        int rc = run_cmd("pkill -KILL -f 'ewverify' 2>/dev/null || true", out, sizeof(out));
+        (void)rc;
+        printf("  Cleanup complete.\n");
         return 0;
     }
 
